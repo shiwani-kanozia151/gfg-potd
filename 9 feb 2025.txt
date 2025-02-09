@@ -1,0 +1,47 @@
+DATE: 9 FEB 2025
+
+//GFG POTD
+
+Maximum path sum from any node
+
+Given a binary tree, the task is to find the maximum path sum. The path may start and end at any node in the tree.
+
+Examples:
+
+Input: root[] = [10, 2, 10, 20, 1, N, -25, N, N, N, N, 3, 4]
+Output: 42
+
+// FOR DIAGRAM SEE PROBLEM 
+
+//if wants to get more clarification see code story with mik video
+
+class Solution {
+  public:
+    // Function to return maximum path sum from any node in a tree.
+    int maxsum;
+    
+    int solve(Node* root)
+    {
+        if(root==NULL)
+         return 0;
+         
+        int l=solve(root->left);
+        int r=solve(root->right);
+         
+        int dono_acha=l+r+root->data; 
+        int ek_acha=max(l,r)+root->data;
+        int koi_accha_nhi=root->data;
+        
+        maxsum=max({maxsum, dono_acha, ek_acha, koi_accha_nhi});
+        
+        return max(ek_acha, koi_accha_nhi);
+    }
+    int findMaxSum(Node *root) {
+        // code here
+        
+        maxsum=INT_MIN;
+        solve(root);
+        
+        return maxsum;
+    }
+}; 
