@@ -1,0 +1,54 @@
+DATE: 11 FEB 2025
+
+Check for BST
+Given the root of a binary tree. Check whether it is a BST or not.
+Note: We are considering that BSTs can not contain duplicate Nodes.
+A BST is defined as follows:
+
+The left subtree of a node contains only nodes with keys less than the node's key.
+The right subtree of a node contains only nodes with keys greater than the node's key.
+Both the left and right subtrees must also be binary search trees.
+Examples:
+
+Input: root = [2, 1, 3, N, N, N, 5]
+Output: true 
+
+Input: root = [2, N, 7, N, 6, N, 9] 
+Output: false 
+
+Input: root = [10, 5, 20, N, N, 9, 25]
+Output: false
+
+MY APPRAOCH: 
+
+BST have property that if we traverse through the tree we will get the nodes data in the ascending order(INORDER TRAVERSAL).
+so here first i will traverse the tree in inorder and then checks whether the data is in ascending order or not.
+
+CODE:
+
+vector<int>res;
+    void inorder(Node* root)
+    {
+       if(!root)
+        return;
+        
+       inorder(root->left);
+       res.push_back(root->data);
+       inorder(root->right);
+    }
+    bool isBST(Node* root) {
+        // Your code here
+        // for(int i=0; i<res.size(); i++)
+        //  cout<<res[i];
+         
+        inorder(root);
+        
+        for(int i=1; i<res.size(); i++)
+        {
+            if(res[i-1]>res[i])
+             return false;
+             
+        }
+        
+        return true;
+    }
