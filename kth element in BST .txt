@@ -1,0 +1,41 @@
+k-th Smallest in BST
+
+Given a BST and an integer k, the task is to find the kth smallest element in the BST. If there is no kth smallest element present then return -1.
+
+Examples:
+
+Input: root = [2, 1, 3], k = 2   
+Output: 2
+
+Input: root = [2, 1, 3], k = 5   
+Output: -1
+
+
+MY APPROACH:
+// i thought to the inorder traversal of the BST as we know inorder of BST is always in sorted order so from there and from there if k<=res.size() then 
+return res[k-1]th element from the array which we get after traversal..
+
+class Solution {
+  public:
+    // Return the Kth smallest element in the given BST
+    vector<int>res;
+    void inorder(Node* root)
+    {
+        if(!root) return;
+        
+        inorder(root->left);
+        res.push_back(root->data);
+        inorder(root->right);
+        
+    }
+    int kthSmallest(Node *root, int k) {
+        // add code here.
+        inorder(root);
+        
+        if(k<=res.size())
+         return res[k-1];
+         
+        return -1;
+    }
+};
+
