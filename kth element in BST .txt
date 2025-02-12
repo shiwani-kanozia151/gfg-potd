@@ -39,3 +39,7 @@ class Solution {
     }
 };
 
+one more approach is like no need to store the element in the array just take a counter keep track of count while traversing and as soon as the count==k then return that element. 
+
+if in question it is asked like find the kth greatest element in this case then first count the number of nodes in the tree and then find the N-kth smallest == kth largest..
+
