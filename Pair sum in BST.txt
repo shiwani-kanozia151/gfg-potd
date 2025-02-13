@@ -1,0 +1,56 @@
+Pair Sum in BST
+
+Given a Binary Search Tree(BST) and a target. Check whether there's a pair of Nodes in the BST with value summing up to the target. 
+
+Examples:
+Input: root = [7, 3, 8, 2, 4, N, 9], target = 12
+Output: True
+Explanation: In the binary tree above, there are two nodes (8 and 4) that add up to 12.
+
+Input: root = [9, 5, 10, 2, 6, N, 12], target = 23
+Output: False
+Explanation: In the binary tree above, there are no such two nodes exists that add up to 23
+
+
+MY APPROACH: 
+as it is a BST so traverse it in inorder traversal and store the elements of it in an array. As we know inorder traversal of the BST is 
+always in ascending order.so using that concept first traverse and then using 2 pointers approach i will find whether the sum is equal 
+to the target or not. 
+
+CODE: 
+
+class Solution {
+  public:
+   
+   vector<int>res;
+   
+    void in(Node* root)
+    {
+        if(!root)
+         return;
+         
+        in(root->left);
+        res.push_back(root->data);
+        in(root->right);
+    }
+    
+    bool findTarget(Node *root, int target) {
+        // your code here.
+        
+        in(root);
+        int i=0, n=res.size();
+        int j=n-1;
+        
+        while(i<j)
+        {
+            if(res[i]+res[j]==target)
+             return true;
+            else if(res[i]+res[j]>target)
+             j--;
+            else 
+             i++;
+        }
+        
+        return false;
+    }
+} ;
