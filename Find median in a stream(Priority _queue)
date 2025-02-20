@@ -1,0 +1,106 @@
+Find median in a stream
+
+https://www.geeksforgeeks.org/problems/find-median-in-a-stream-1587115620/1
+
+Given a data stream arr[] where integers are read sequentially, the task is to determine the median of the elements encountered so far after each new integer is read.
+There are two cases for median on the basis of data set size.
+1. If the data set has an odd number then the middle one will be consider as median.
+2. If the data set has an even number then there is no distinct middle value and the median will be the arithmetic mean of the two middle values.
+
+Examples:
+Input:  arr[] = [5, 15, 1, 3, 2, 8]
+Output: [5.0, 10.0, 5.0, 4.0, 3.0, 4.0] 
+Explanation: 
+After reading 1st element of stream – 5 -> median = 5.0
+After reading 2nd element of stream – 5, 15 -> median = (5+15)/2 = 10.0 
+After reading 3rd element of stream – 5, 15, 1 -> median = 5.0
+After reading 4th element of stream – 5, 15, 1, 3 ->  median = (3+5)/2 = 4.0
+After reading 5th element of stream – 5, 15, 1, 3, 2 -> median = 3.0
+After reading 6th element of stream – 5, 15, 1, 3, 2, 8 ->  median = (3+5)/2 = 4.0
+
+Input: arr[] = [2, 2, 2, 2]
+Output: [2.0, 2.0, 2.0, 2.0]
+Explanation: 
+After reading 1st element of stream – 2 -> median = 2.0
+After reading 2nd element of stream – 2, 2 -> median = (2+2)/2 = 2.0
+After reading 3rd element of stream – 2, 2, 2 -> median = 2.0
+After reading 4th element of stream – 2, 2, 2, 2 ->  median = (2+2)/2 = 2.0
+Constraints:
+1 <= arr.size() <= 10^5
+1 <= x <= 10^6
+
+
+APPROACH1: USING THE CONCEPT OF SORTING ...
+using the concept like we will run a loop from 0 to n and at evry increasing value of loop we are stroing the elemetns in a temp array and sort them and
+according the size if odd then return n/2 th element and store it iin the result arary if array size is even then (n/2th element + n/2+1th element )/2 krkre 
+nikal k array me insert kr denge..
+TC:O(n^2 log n)-->will pass all cases except 1 ..
+
+CODE: 
+int n=arr.size();
+        vector<double>res;
+        
+        for(int i=0; i<n; i++)
+        {
+           vector<int>temp(arr.begin(), arr.begin()+i+1);
+            sort(temp.begin(), temp.end());
+            
+            int si=temp.size();
+            if(si%2 != 0)
+             res.push_back((double)(temp[si/2]));
+            else
+            {
+                double sum = (temp[si/2]+temp[(si/2)-1])/2.0;
+                 res.push_back(sum);
+            }
+        }
+        
+        return res;
+
+APPROACH2: USING HEAPS...
+//making 2 heaps minheap and maxheap maxheap from left side and minheap from right side ..
+//run a loop inside that loop
+//step 1: insert the element of the loop first in the maxheap 
+//step 2: pop the topmost element from the maxheap and push it in the minheap..
+//step 3: if(left.size()<right.size()) toh right vale ka element ko pop krke left vale me dal do
+//step 4: if(left.size()==right.size()) then return the mean of both topmost element of both heaps..
+//step 5: else return the topmost element from the left..
+
+CODE:
+int n=arr.size();
+        vector<double>res;
+        
+        priority_queue<int>maxh; // maxheap..
+        priority_queue<int ,vector<int>, greater<int>>minh;
+        
+        for(int i=0; i<n; i++)
+        {
+            int ele=arr[i];
+            
+            maxh.push(ele);//step1
+            
+            int top=maxh.top();
+             maxh.pop();
+             minh.push(top);//step2...
+             
+            if(maxh.size()<minh.size()) // step3...
+            {
+                int t=minh.top();
+                minh.pop();
+                
+                maxh.push(t); 
+            }
+            
+            if(maxh.size()==minh.size())
+             res.push_back((maxh.top()+minh.top())/2.0);
+             
+            else
+             res.push_back((double)maxh.top());
+             
+        }
+        
+        return res;
+        
+     
+
+           
