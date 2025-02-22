@@ -1,0 +1,89 @@
+Longest valid Parentheses
+
+https://www.geeksforgeeks.org/problems/longest-valid-parentheses5657/1
+
+Given a string s consisting of opening and closing parenthesis '(' and ')'. Find the length of the longest valid parenthesis substring.
+A parenthesis string is valid if:
+For every opening parenthesis, there is a closing parenthesis.
+The closing parenthesis must be after its opening parenthesis.
+
+Examples :
+
+Input: s = "((()"
+Output: 2
+Explanation: The longest valid parenthesis substring is "()".
+
+Input: s = ")()())"
+Output: 4
+Explanation: The longest valid parenthesis substring is "()()".
+
+Input: s = "())()"
+Output: 2
+Explanation: The longest valid parenthesis substring is "()".
+
+Constraints:
+1 ≤ s.size() ≤ 10^6  
+s consists of '(' and ')' only
+
+APPROACH:
+here i have used stack but initially i was taking the brackets inside the stack but with that approach only 10 test cases was passed and for the rest i was not able 
+to get whats going wrong with that approach.
+so i watched a u tube video from ther i came to know that we need to enter the index of the string instead of using the charracter..
+
+
+CODE:
+
+class Solution {
+  public:
+    int maxLength(string& s) {
+        // code here
+       /*
+        int maxi=0;
+        int n=s.size(), len=0;
+        stack<char>st;
+        
+        for(int i=0; i<n; i++)
+        {
+            if(s[i]=='(')
+             st.push('(');
+             
+            else if(!st.empty() && (st.top()=='('  && s[i]==')'))
+            {
+                len += 2;
+                st.pop();
+            }
+            else if(s[i]==')')
+             len=0;
+             
+            maxi=max(maxi, len); 
+        }
+        
+        return maxi; */
+        
+        int maxi=0, n=s.size();
+        stack<int>st;
+        st.push(-1); // for handling the edge case '()'.. which starts from the very begining like already pehle se hi balance hai uske liye..
+        
+        for(int i=0; i<n; i++)
+        {
+            if(s[i]=='(')
+             st.push(i);
+            else
+            {
+                 st.pop();
+                
+                if(!st.empty())
+                {
+                   
+                    maxi=max(maxi, i-st.top());
+                }
+                else
+                 st.push(i); //())()() aise case me -1 bhi pop hojaega aur pehle vali string ki len save ho ghi hogi maxi me toh isliye usme i dal diya
+                 
+                
+            }
+        }
+        
+        return maxi;
+    }
+};
