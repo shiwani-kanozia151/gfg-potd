@@ -1,0 +1,85 @@
+Stock span problem
+
+https://www.geeksforgeeks.org/problems/stock-span-problem-1587115621/1
+
+The stock span problem is a financial problem where we have a series of daily price quotes for a stock and we need to calculate the span of stock price for all days. The span arr[i] of the stocks price on a given day i is defined as the maximum number of consecutive days just before the given day, for which the price of the stock on the given day is less than or equal to its price on the current day.
+
+Examples:
+
+Input: arr[] = [100, 80, 60, 70, 60, 75, 85]
+Output: [1, 1, 1, 2, 1, 4, 6]
+Explanation: Traversing the given input span 100 is greater than equal to 100 and there are no more elements behind it so the span is 1, 80 is greater than equal to 80 and smaller than 100 so the span is 1, 60 is greater than equal to 60 and smaller than 80 so the span is 1, 70 is greater than equal to 60,70 and smaller than 80 so the span is 2 and so on.  Hence the output will be 1 1 1 2 1 4 6.
+
+Input: arr[] = [10, 4, 5, 90, 120, 80]
+Output: [1, 1, 2, 4, 5, 1]
+Explanation: Traversing the given input span 10 is greater than equal to 10 and there are no more elements behind it so the span is 1, 4 is greater than equal to 4 and smaller than 10 so the span is 1, 5 is greater than equal to 4,5 and smaller than 10 so the span is 2,  and so on. Hence the output will be 1 1 2 4 5 1.
+
+Constraints:
+1 ≤ arr.size()≤ 10^5
+1 ≤ arr[i] ≤ 10^5
+
+APPROACH:
+
+As by reading the problem came to know that its a problem of stack as it is same as next greatest element and here my approach to the problem is like we will use 2 stack
+one for first storing the elment that are greater then the second one for storing the element that are being popped by the first stack as they are smaller then the current
+element and then again push the elements from stack2 to stack1 as they might be count in the next elemnt of the array. but that approach gives TLE for 1 test case .
+
+The optimised approach for this is to use the index instead of storing the elements first store the index of the array elements and then traverse to the arrays if 
+arr[st.top()]<arr[i] then pop the element from the stack and while poppin if the stack become empty then store the i+1 in the result array otherwise store i-st.top();
+
+CODE:
+..................................................USING 2 STACKS........................................................................................................
+
+int n=arr.size();
+        vector<int>res(n, 1);
+        
+        stack<int>st1, st2;
+        st1.push(arr[0]);
+        
+        for(int i=1; i<n; i++)
+        {
+            while(!st1.empty() &&  st1.top()<=arr[i])
+            {
+                int x=st1.top();
+                st1.pop();
+                
+                res[i]=res[i]+1;
+                
+                st2.push(x);
+            }
+            
+            while(!st2.empty())
+            {
+                int x=st2.top();
+                st2.pop();
+                
+                st1.push(x);
+            }
+            
+            st1.push(arr[i]);
+        }
+        
+        return res;
+
+............................................................USING 1 STACK..............................................................................................
+
+ int n=arr.size();
+        stack<int>st;
+        vector<int>res;
+        
+        for(int i=0; i<n; i++)
+        {
+            while(!st.empty() && arr[st.top()]<=arr[i])
+            {
+                st.pop();
+            }
+            
+            if(st.empty())
+             res.push_back(i+1);
+            else
+             res.push_back(i-st.top());
+             
+             st.push(i);
+        }
+        
+        return res;
