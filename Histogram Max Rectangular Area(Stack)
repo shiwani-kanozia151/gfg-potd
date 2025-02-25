@@ -1,0 +1,105 @@
+Histogram Max Rectangular Area
+
+https://www.geeksforgeeks.org/problems/maximum-rectangular-area-in-a-histogram-1587115620/1
+
+You are given a histogram represented by an array arr, where each element of the array denotes the height of the bars in the histogram. All bars have the same width of 1 unit.
+Your task is to find the largest rectangular area possible in the given histogram, where the rectangle can be formed using a number of contiguous bars.
+
+Examples:
+
+Input: arr[] = [60, 20, 50, 40, 10, 50, 60]
+Largest-Rectangular-Area-in-a-Histogram
+Output: 100
+Explanation: We get the maximum by picking bars highlighted above in green (50, and 60). The area is computed (smallest height) * (no. of the picked bars) = 50 * 2 = 100.
+
+Input: arr[] = [3, 5, 1, 7, 5, 9]
+Output: 15
+Explanation:  We get the maximum by picking bars 7, 5 and 9. The area is computed (smallest height) * (no. of the picked bars) = 5 * 3 = 15.
+
+Input: arr[] = [3]
+Output: 3
+Explanation: In this example the largest area would be 3 of height 3 and width 1.
+
+Constraints:
+1 ≤ arr.size() ≤ 10^5
+0 ≤ arr[i] ≤ 10^4
+
+APPROACH:
+
+As i have already seen this problem but i was not able to get the idea how to go for this problem then i saw a video related to it by Aditya Verma then i got the idea 
+how to proceed with this problem it is similar to the problem of the stock span problem like that here also we need to store the indexes instead of storing the elements 
+so here basically if we are at a particular index then we are searching for the elemtent that are smaller to its left and smaller to its right. so likewise i made two
+vector one for storing the next smallest element to left and one for storing the next smallest to the right. 
+ 
+CODE:
+
+int n; 
+    vector<int>NSL;
+    vector<int>NSR;
+    
+    void nsl(vector<int>&arr)
+    {
+       stack<int>st;
+       NSL.push_back(-1);
+       
+       st.push(0);
+       
+       for(int i=1; i<n; i++)
+       {
+            while(!st.empty() && arr[st.top()]>=arr[i])
+              st.pop();
+            
+            if(st.empty())
+             NSL.push_back(-1);
+            else
+             NSL.push_back(st.top());
+             
+            st.push(i); 
+       }
+    }
+    
+    void nsr(vector<int>&arr)
+    {
+       stack<int>st;
+       NSR.push_back(n);
+       st.push(n-1);
+       for(int i=n-2; i>=0; i--)
+       {
+           while(!st.empty() && arr[st.top()]>=arr[i])
+            st.pop();
+            
+            if(st.empty())
+              NSR.push_back(n);
+            else
+              NSR.push_back(st.top());
+              
+            st.push(i);  
+             
+       }
+       
+       reverse(NSR.begin(), NSR.end());
+       
+    }
+    
+    int getMaxArea(vector<int> &arr) {
+        // Your code here
+         n=arr.size();
+        
+        if(n==1) return arr[0];
+        
+        int maxi=0;
+        
+        nsl(arr);
+        nsr(arr);
+        
+        for(int i=0; i<n; i++)
+        {
+            int x=NSR[i]-NSL[i]-1;
+          // cout<<x<<" ";
+            
+            maxi = max(maxi, x*arr[i]);
+        }
+        
+        return maxi;
+    }
+    
