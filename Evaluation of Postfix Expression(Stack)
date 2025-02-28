@@ -1,0 +1,83 @@
+Evaluation of Postfix Expression
+
+https://www.geeksforgeeks.org/problems/evaluation-of-postfix-expression1735/1
+
+You are given an array of strings arr that represents a valid arithmetic expression written in Reverse Polish Notation (Postfix Notation). Your task is to evaluate the expression and return an integer representing its value.
+
+Key Details:
+
+The valid operators are '+', '-', '*', and '/'.
+Each operand is guaranteed to be a valid integer or another expression.
+The division operation between two integers always rounds the result towards zero, discarding any fractional part.
+No division by zero will occur in the input.
+The input is a valid arithmetic expression in Reverse Polish Notation.
+The result of the expression and all intermediate calculations will fit in a 32-bit signed integer.
+Examples:
+
+Input: arr = ["2", "3", "1", "*", "+", "9", "-"]
+Output: -4
+Explanation: If the expression is converted into an infix expression, it will be 2 + (3 * 1) – 9 = 5 – 9 = -4.
+
+Input: arr = ["100", "200", "+", "2", "/", "5", "*", "7", "+"]
+Output: 757
+Explanation: If the expression is converted into an infix expression, it will be ((100 + 200) / 2) * 5 + 7  = 150 * 5 + 7 = 757.
+Constraints:
+
+1 <= arr.size() <= 10^5
+arr[i] is either an operator: "+", "-", "*", or "/", or an integer in the range [-104, 104]
+
+APPROACH:
+
+as by watching the problem it seem to be of stack and in stack only these are the common questions of converting postfix to prefix, infix to postfix and so on.. like that
+so here i have used stack of int type to store only the integer part and if the array contains any operator then the solve function is called which evaluates that expression.
+
+CODE:
+
+class Solution {
+  public:
+    
+    int solve(string &ch, stack<int>&st)
+    {
+       if(st.size()>=2)
+       {
+           int x=st.top();
+           st.pop();
+           
+           int y=st.top();
+           st.pop();
+           
+           if(ch=="+")
+            return x+y;
+           else if(ch=="-")
+            return y-x;
+           else if(ch=="*")
+            return x*y;
+           else if(ch=="/")
+            return y/x;
+       }
+       
+        return -1;
+    }
+    
+    int evaluate(vector<string>& arr) {
+        // code here
+        int n=arr.size();
+        stack<int>st;
+        
+        for(int i=0; i<n; i++)
+        {
+            if(arr[i]=="+" || arr[i]=="-" || arr[i]=="*" || arr[i]=="/")
+            {
+                int num=solve(arr[i], st);
+                st.push(num);
+            }
+            else
+            {
+                int x=stoi(arr[i]);
+                st.push(x);
+            }
+        }
+        
+        return st.top();
+    }
+};
