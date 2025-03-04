@@ -1,0 +1,60 @@
+Longest Increasing Subsequence
+
+https://www.geeksforgeeks.org/problems/longest-increasing-subsequence-1587115620/1
+
+Given an array arr[] of non-negative integers, the task is to find the length of the Longest Strictly Increasing Subsequence (LIS).
+
+A subsequence is strictly increasing if each element in the subsequence is strictly less than the next element.
+
+Examples:
+
+Input: arr[] = [5, 8, 3, 7, 9, 1]
+Output: 3
+Explanation: The longest strictly increasing subsequence could be [5, 7, 9], which has a length of 3.
+
+Input: arr[] = [0, 8, 4, 12, 2, 10, 6, 14, 1, 9, 5, 13, 3, 11, 7, 15]
+Output: 6
+Explanation: One of the possible longest strictly increasing subsequences is [0, 2, 6, 9, 13, 15], which has a length of 6.
+
+Input: arr[] = [3, 10, 2, 1, 20]
+Output: 3
+Explanation: The longest strictly increasing subsequence could be [3, 10, 20], which has a length of 3.
+
+Constraints:
+1 ≤ arr.size() ≤ 103
+0 ≤ arr[i] ≤ 106
+
+APPROACH: USING BINARY SEARCH CONCEPT..
+
+using the concept here like first push the first element of the given array in the result array. and after that run a loop from 1 to the size of the given array , if the 
+array element is greater than the last element of the reuslt array then push back the element to the result array otherwise find the lower bound of that element in the
+result array and replace that index element with the current eleemnt of the array..
+
+CODE: TC:O(N logN)...
+
+class Solution {
+  public:
+    int lis(vector<int>& arr) {
+        // Binary Search approach...
+        
+        int n=arr.size();
+        
+        vector<int>res;
+        res.push_back(arr[0]);
+        
+        for(int i=1; i<n; i++)
+        {
+           if(arr[i]>res.back())
+            res.push_back(arr[i]);
+           else
+           {
+               int idx=lower_bound(res.begin(), res.end(), arr[i])-res.begin();
+               res[idx]=arr[i];
+           }
+            
+        }
+        
+        return res.size();
+        
+    }
+};
