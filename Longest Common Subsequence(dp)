@@ -1,0 +1,61 @@
+Longest Common Subsequence
+
+https://www.geeksforgeeks.org/problems/longest-common-subsequence-1587115620/1
+
+Given two strings s1 and s2, return the length of their longest common subsequence (LCS). If there is no common subsequence, return 0.
+
+A subsequence is a sequence that can be derived from the given string by deleting some or no elements without changing the order of the remaining elements. For example, "ABE" is a subsequence of "ABCDE".
+
+Examples:
+
+Input: s1 = "ABCDGH", s2 = "AEDFHR"
+Output: 3
+Explanation: The longest common subsequence of "ABCDGH" and "AEDFHR" is "ADH", which has a length of 3.
+
+Input: s1 = "ABC", s2 = "AC"
+Output: 2
+Explanation: The longest common subsequence of "ABC" and "AC" is "AC", which has a length of 2.
+
+Input: s1 = "XYZW", s2 = "XYWZ"
+Output: 3
+Explanation: The longest common subsequences of "XYZW" and "XYWZ" are "XYZ" and "XYW", both of length 3.
+
+Constraints:
+1<= s1.size(), s2.size() <=103
+Both strings s1 and s2 contain only uppercase English letters.
+
+APPROACH:
+so basically to solve this problem we are checking from the last of both strings if the last char are same then add 1 to the ans and call for the rest of the string 
+if any of the string is empty then the lcs of both the string will be 0 and if the last are not same then it might be case that in future they have some same char so we
+will take max out of once reduce the len of one string and again reduce the len of another string.
+
+CODE:
+//MEMOIZED AND RECURSIVE
+class Solution {
+  public:
+   // int dp[1001][1001];
+    
+    int solve(int n, int m, string &s1, string &s2, vector<vector<int>>&dp)
+    {
+        if(n==0 || m==0)
+         return 0;
+         
+        if(dp[n][m]!=-1)
+         return dp[n][m];
+         
+        if(s1[n-1]==s2[m-1])
+         return dp[n][m] = 1+solve(n-1, m-1, s1, s2, dp);
+        else 
+         return dp[n][m]= max( solve(n, m-1, s1, s2, dp), solve(n-1, m, s1, s2, dp));
+    }
+    int lcs(string &s1, string &s2) {
+        // code here
+        
+        int n=s1.size(), m=s2.size();
+        
+        vector<vector<int>>dp(n+1, vector<int>(m+1, -1));
+        
+        return solve(n, m, s1, s2, dp);
+        
+    }
+};
