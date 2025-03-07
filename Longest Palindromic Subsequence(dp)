@@ -1,0 +1,104 @@
+Longest Palindromic Subsequence
+
+https://www.geeksforgeeks.org/problems/longest-palindromic-subsequence-1612327878/1
+
+Given a string s, return the length of the longest palindromic subsequence.
+A subsequence is a sequence that can be derived from the given sequence by deleting some or no elements without changing the order of the remaining elements.
+A palindromic sequence is a sequence that reads the same forward and backward.
+
+Examples:
+Input: s = "bbabcbcab"
+Output: 7
+Explanation: Subsequence "babcbab" is the longest subsequence which is also a palindrome.
+
+Input: s = "abcd"
+Output: 1
+Explanation: "a", "b", "c" and "d" are palindromic and all have a length 1.
+
+Input: s = "agbdba"
+Output: 5
+Explanation: The longest palindromic subsequence is "abdba", which has a length of 5. The characters in this subsequence are taken from the original string "agbdba", and they maintain the order of the string while forming a palindrome.
+
+Constraints:
+1 ≤ s.size() ≤ 1000
+The string contains only lowercase letters.
+
+APPROACH1:
+
+this problem i have solved earlier while learning about the dp so in this problem to sole thsi problem we must know about the longest commom subsequence of letters
+same approach we will use here but here we have only 1  string for the other string we need to reverse the string and one string in its original form and other in its 
+reverse form we will pass. and find the lcs of the 2 strings..
+
+CODE:
+
+but with the following code getting TLE..
+
+class Solution {
+  public:
+    int solve(string s, string p, int n, int m,  vector<vector<int>>&dp)
+    {
+        if(n==0 || m==0) return 0;
+        
+        if(dp[n][m]!=-1)
+         return dp[n][m];
+        
+        if(s[n-1]==p[m-1])
+         dp[n][m]=1+solve(s, p, n-1, m-1, dp);
+         
+        else
+         dp[n][m]=max(solve(s, p, n-1, m, dp), solve(s, p, n, m-1, dp));
+        
+        return dp[n][m];  
+          
+    }
+    int longestPalinSubseq(string &s) {
+        // code here
+        int n=s.size();
+        string p=s;
+        reverse(s.begin(), s.end());
+        
+        vector<vector<int>>dp(n+1, vector<int>(n+1, -1));
+        
+        return solve(s, p, n, n, dp);
+        
+        //return dp[n][n];
+    }
+};
+
+
+
+APPROACH2: using a constant sized array..
+
+class Solution {
+  public:
+    int dp[1001][1001];
+    int solve(string &s, string &p, int n, int m)
+    {
+        if(n==0 || m==0) return 0;
+        
+        if(dp[n][m]!=-1)
+         return dp[n][m];
+        
+        if(s[n-1]==p[m-1])
+         return dp[n][m]=1+solve(s, p, n-1, m-1);
+         
+        else
+         return dp[n][m]=max(solve(s, p, n-1, m), solve(s, p, n, m-1));
+        
+        //return dp[n][m];  
+          
+    }
+    int longestPalinSubseq(string &s) {
+        // code here
+        int n=s.size();
+        memset(dp, -1, sizeof(dp));
+        string p=s;
+        reverse(s.begin(), s.end());
+        
+       // vector<vector<int>>dp(n+1, vector<int>(n+1, -1));
+        
+        return solve(s, p, n, n);
+        
+        //return dp[n][n];
+    }
+};
