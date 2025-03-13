@@ -1,0 +1,66 @@
+0 - 1 Knapsack Problem
+
+https://www.geeksforgeeks.org/problems/0-1-knapsack-problem0945/1
+
+Given n items, each with a specific weight and value, and a knapsack with a capacity of W, the task is to put the items in the knapsack such that the sum of weights 
+of the items <= W and the sum of values associated with them is maximized. 
+
+Note: You can either place an item entirely in the bag or leave it out entirely. Also, each item is available in single quantity.
+
+Examples :
+
+Input: W = 4, val[] = [1, 2, 3], wt[] = [4, 5, 1] 
+Output: 3
+Explanation: Choose the last item, which weighs 1 unit and has a value of 3.
+
+Input: W = 3, val[] = [1, 2, 3], wt[] = [4, 5, 6] 
+Output: 0
+Explanation: Every item has a weight exceeding the knapsack's capacity (3).
+
+Input: W = 5, val[] = [10, 40, 30, 50], wt[] = [5, 4, 2, 3] 
+Output: 80
+Explanation: Choose the third item (value 30, weight 2) and the last item (value 50, weight 3) for a total value of 80.
+
+Constraints:
+2 ≤ val.size() = wt.size() ≤ 10^3
+1 ≤ W ≤ 10^3
+1 ≤ val[i] ≤ 10^3
+1 ≤ wt[i] ≤ 10^3
+
+APPROACH:
+here basically we have choices to either take or not take as there are choices then we will go for the recursion here. so i have used memoization and top down approach 
+to solve this problem. here see in this problem if the current wt of the item is less than the given wt ofthe bag then we have to 2 choices either take that item or not
+to take that item if we are taking then we need to add the value corresponding to that element and need to decrease the wt of the bag and increment the counter. if not taking
+that element then we only need to move to the next element. and if the wt of the item is greater then the wt of the bag then we will not take that item..
+
+CODE:
+class Solution {
+  public:
+  
+  int t[1001][1001];
+    
+    int KnapSack(int W, vector<int> &wt, vector<int> &val, int n)
+    {
+        if(n==0 || W==0)
+        return 0;
+        
+        if(t[W][n]!=-1)
+         return t[W][n];
+        
+       if(wt[n-1]<=W)
+        return t[W][n] = max(KnapSack(W-wt[n-1], wt, val, n-1)
+           +val[n-1], KnapSack(W, wt, val, n-1));
+       else
+        return t[W][n] = KnapSack(W, wt, val, n-1);
+    }
+    
+    // Function to return max value that can be put in knapsack of capacity.
+    int knapsack(int W, vector<int> &val, vector<int> &wt) {
+        // code here
+        memset(t, -1, sizeof(t));
+        
+        int n=val.size();
+        
+        return KnapSack(W, wt, val, n);
+    }
+};
