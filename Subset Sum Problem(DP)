@@ -1,0 +1,74 @@
+Subset Sum Problem
+
+https://www.geeksforgeeks.org/problems/subset-sum-problem-1611555638/1
+
+Given an array of positive integers arr[] and a value sum, determine if there is a subset of arr[] with sum equal to given sum. 
+
+Examples:
+
+Input: arr[] = [3, 34, 4, 12, 5, 2], sum = 9
+Output: true 
+Explanation: Here there exists a subset with target sum = 9, 4+3+2 = 9.
+
+Input: arr[] = [3, 34, 4, 12, 5, 2], sum = 30
+Output: false
+Explanation: There is no subset with target sum 30.
+
+Input: arr[] = [1, 2, 3], sum = 6
+Output: true
+Explanation: The entire array can be taken as a subset, giving 1 + 2 + 3 = 6.
+
+Constraints:
+1 <= arr.size() <= 200
+1<= arr[i] <= 200
+1<= sum <= 10^4
+
+APPROACH: 
+As i have already solve this problem earlier so i know the approach to solve this problem. Basically in this problem we have choices either to take this element or not
+whereever we are getting choices+decision we will go to solve this problem using recursion. so here first try to make a recursive tree which will basically help to code
+the problem 
+base case: if sum==0 return true; // as we have successfully find a subset whose sum is equal to the given sum.
+           if idx>=arr.size(); // return false as while traversing we have reached the last and didn't find any subset.
+
+here basically a single element has 2 choices if it is less than or equal to the sum then take, otherwise not_take..
+
+here basically we have used the approach to either take or not_take..
+in case if the arr[i]<=sum then take and call for solve(arr, sum-arr[i], idx+1)
+in case of not_take call for solve(arr, sum, idx+1)  
+
+CODE:
+USING RECURSION AND MEMOIZATION APPPROACH.
+
+class Solution {
+  public:
+    int t[201][10001];
+    
+    bool solve(vector<int>& arr, int sum, int idx)
+    {
+        if(sum==0) return true;
+        if(idx>=arr.size()) return false;
+        
+        if(t[idx][sum] != -1)
+         return t[idx][sum];
+         
+        
+        bool not_take=solve(arr, sum, idx+1);
+        
+        bool take=false;
+        
+        if(arr[idx]<=sum)
+        {
+            take=solve(arr, sum-arr[idx], idx+1);
+                 
+        }
+        
+        return t[idx][sum]=take || not_take;
+    }
+    bool isSubsetSum(vector<int>& arr, int sum) {
+        // code here
+        memset(t, -1, sizeof(t));
+        return solve(arr, sum, 0);
+    }
+};
+     
+
