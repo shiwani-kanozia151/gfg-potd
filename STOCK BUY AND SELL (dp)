@@ -1,0 +1,205 @@
+STOCK BUY AND SELL 
+
+basically this problem has 6 subproblems 
+
+PROBLEM 1: u can buy and sell stock only 1 time but before selling u need to buy it.
+APPROACH: here simpli take the first element as minimum and traverse the array from index1 to n and find the cost=arr[i]-mini;
+             and take max(maxi, cost) and min(mini, arr[i]) 
+
+
+PROBLEM 2: u can buy or sell a stock any number of times but before buying u need to sell the stock, return the maximum profit..
+APPROACH: to solve this problem we are suing recursion basically here every element has 2 choices either to become the part of the buy or not and same for sell .
+          so 
+           
+          CODE: 
+            class Solution {
+  public:
+    
+     int t[100001][2];
+     // 1 -->buy, 0-->sell
+    int solve(vector<int>& prices, int idx, int buy)
+    {
+        
+        if(idx==prices.size()) return 0;
+        
+        if(t[idx][buy] != -1)
+         return t[idx][buy];
+        
+        if(buy)
+         return t[idx][buy] = max(-prices[idx]+
+                               solve(prices, idx+1, 0),
+                               solve(prices, idx+1, 1));
+        
+        else
+          return t[idx][buy] = max(prices[idx]+
+                                 solve(prices, idx+1, 1),
+                                 solve(prices, idx+1, 0));
+    }
+    
+    int maxProfit(vector<int>& prices) {
+        // code here
+        
+        memset(t, -1, sizeof(t));
+        return solve(prices, 0, 1);
+    }
+};
+
+
+PROBLEM 3 : u are given with stocks and u can buy only k stocks, return the maximum profit.
+APPROACH: to solve this problem we are using recursion and memoization..
+
+CODE: 
+
+ class Solution {
+  public:
+    
+    int t[1001][201][2];
+    // 1 -->buy, 0-->sell
+    int solve(vector<int>& prices, int cap, int idx, int buy)
+    {
+        if(cap==0) return 0;
+        
+        if(idx==prices.size()) return 0;
+        
+        if(t[idx][cap][buy] != -1)
+         return t[idx][cap][buy];
+        
+        if(buy)
+         return t[idx][cap][buy] = max(-prices[idx]+
+                               solve(prices, cap, idx+1, 0),
+                               solve(prices, cap, idx+1, 1));
+        
+        else
+          return t[idx][cap][buy] = max(prices[idx]+
+                                 solve(prices, cap-1, idx+1, 1),
+                                 solve(prices, cap, idx+1, 0));
+    }
+    
+    int maxProfit(vector<int>& prices, int k) {
+        // code here
+        
+        memset(t, -1, sizeof(t));
+        return solve(prices, k, 0, 1);
+    }
+};
+
+
+
+PROBLEM 4 : here atmost 2 times u can buy and sell.
+APPROACH : using recursion and memoization..
+
+CODE:
+
+class Solution {
+  public:
+    
+    int t[1001][201][2];
+    // 1 -->buy, 0-->sell
+    int solve(vector<int>& prices, int cap, int idx, int buy)
+    {
+        if(cap==0) return 0;
+        
+        if(idx==prices.size()) return 0;
+        
+        if(t[idx][cap][buy] != -1)
+         return t[idx][cap][buy];
+        
+        if(buy)
+         return t[idx][cap][buy] = max(-prices[idx]+
+                               solve(prices, cap, idx+1, 0),
+                               solve(prices, cap, idx+1, 1));
+        
+        else
+          return t[idx][cap][buy] = max(prices[idx]+
+                                 solve(prices, cap-1, idx+1, 1),
+                                 solve(prices, cap, idx+1, 0));
+    }
+    
+    int maxProfit(vector<int>& prices, int k) {
+        // code here
+        
+        memset(t, -1, sizeof(t));
+        return solve(prices, 2, 0, 1);
+    }
+};
+
+
+
+
+PROBLEM 5 : here in this problem basically there is a cooldown that is u cant buy the stock just after selling the stock.return the maximum profit.
+APPROACH: just need to change while selling u need to increment the index by 2. 
+
+CODE:
+
+class Solution {
+  public:
+    
+    int t[1001][201][2];
+    // 1 -->buy, 0-->sell
+    int solve(vector<int>& prices, int cap, int idx, int buy)
+    {
+        if(cap==0) return 0;
+        
+        if(idx==prices.size()) return 0;
+        
+        if(t[idx][cap][buy] != -1)
+         return t[idx][cap][buy];
+        
+        if(buy)
+         return t[idx][cap][buy] = max(-prices[idx]+
+                               solve(prices, cap, idx+1, 0),
+                               solve(prices, cap, idx+1, 1));
+        
+        else
+          return t[idx][cap][buy] = max(prices[idx]+
+                                 solve(prices, cap-1, idx+2, 1),
+                                 solve(prices, cap, idx+1, 0));
+    }
+    
+    int maxProfit(vector<int>& prices, int k) {
+        // code here
+        
+        memset(t, -1, sizeof(t));
+        return solve(prices, k, 0, 1);
+    }
+};
+
+
+
+
+PROBLEM 6 : here basically it is charging fee per transaction ..
+APPROACH  :  here while selling the stock we need to subtract the fee also
+
+CODE:
+
+class Solution {
+public:
+    
+    int t[50001][2];
+
+    int solve(vector<int>& prices, int fee, int idx, int buy)
+    {
+        if(idx==prices.size())
+         return 0;
+
+        if(t[idx][buy] != -1)
+         return t[idx][buy];
+
+        if(buy)
+         return t[idx][buy] = max(-prices[idx]+
+                               solve(prices, fee, idx+1, 0) ,
+                               solve(prices, fee, idx+1, 1));
+
+        else
+         return t[idx][buy] = max(prices[idx]-fee+
+                                  solve(prices, fee, idx+1, 1),
+                                          solve(prices, fee, idx+1, 0));             
+    }
+    int maxProfit(vector<int>& prices, int fee) {
+        
+        memset(t, -1, sizeof(t));
+        return solve(prices, fee, 0, 1);
+    }
+};  
+  
+ 
