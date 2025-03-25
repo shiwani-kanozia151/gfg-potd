@@ -1,0 +1,86 @@
+Boolean Parenthesization
+
+https://www.geeksforgeeks.org/problems/boolean-parenthesization5610/1
+
+You are given a boolean expression s containing
+    'T' ---> true
+    'F' ---> false 
+and following operators between symbols
+   &   ---> boolean AND
+    |   ---> boolean OR
+   ^   ---> boolean XOR
+Count the number of ways we can parenthesize the expression so that the value of expression evaluates to true.
+
+Note: The answer is guaranteed to fit within a 32-bit integer.
+
+Examples:
+
+Input: s = "T|T&F^T"
+Output: 4
+Explaination: The expression evaluates to true in 4 ways: ((T|T)&(F^T)), (T|(T&(F^T))), (((T|T)&F)^T) and (T|((T&F)^T)).
+
+Input: s = "T^F|F"
+Output: 2
+Explaination: The expression evaluates to true in 2 ways: ((T^F)|F) and (T^(F|F)).
+
+Constraints:
+
+1 ≤ |s| ≤ 100 
+
+APPROACH:
+this problem is the variation of the matrix chain multiplication(MCM) by reading the problem itself we will get that we need to put the parenthesis in such a way that 
+the expression will evaluates to true and we have to return the count in how many ways we will put the parenthesis so that the expression evaluates to true;
+
+1. so here first we will find the indexes of i and j, so here i will start from 0 and j will went upto n-1 there will be no problem with this approach.
+
+here while passing the values in the recursive solve function we will pass one more variable other than the i and j that is of boolean type named as isTrue.
+this variable is needed as we need to count the number of false and true and after that with their combinations only we will be able to get in how many cases we will
+get the expression as true.
+
+and while evaluating the string we will find the lt, lf, rt, rf and based on that only we will get the ans ..
+
+2. BASE CONDITION: 
+    i. if(i>j) return 0; // there is no char in the string ..
+   ii. if(i==j) //if there is only one char in the string then if the isTrue variable is true then check for the char present at the ith position based on that return 
+              // 0 or 1.
+      {
+         if(isTrue==true)
+          return s[i]=='T';
+         else
+          return s[i]=='F';
+      }
+
+3. for loop working
+    here the k will starts from i+1 as the k always be at the operator and go till k<=j-1 and it will increment by 2 as the operator will be after the char.
+      for(int k=i+1; k<=j-1; k=k+2)
+
+4. calculating the temporary ans:
+      int lf=solve(s, i, k-1, false);
+      int lt=solve(s, i, k-1, true);
+      int rf=solve(s, k+1, j, false);
+      int rt=solve(s, k+1, j, true);
+
+5. calculating the result using the temporary ans 
+              if(s[k]=='&')
+              {
+                   if(isTrue==true)
+                       ans=ans+lt*rt;
+                   else 
+                       ans=ans+lf*rf+lf*rt+lt*rf;
+              }
+              else if(s[k]=='|')
+              {
+                   if(isTrue==true)
+                      ans+=(lt*rt)+(lt*rf)+(lf*rt);
+                   else 
+                      ans+=(lf*rf);
+              }
+              else if(s[k]=='^')
+              {
+                    if(isTrue==true) 
+                          ans+=lt*rf+rt*lf;
+                    else 
+                          ans+=lt*rt+lf*rf;
+              }
+    
+    5. returning the ans as result.         
