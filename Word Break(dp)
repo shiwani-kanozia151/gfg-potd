@@ -1,0 +1,86 @@
+Word Break
+
+https://www.geeksforgeeks.org/problems/word-break1352/1
+
+You are given a string s and a list dictionary[] of words. Your task is to determine whether the string s can be formed by concatenating 
+one or more words from the dictionary[].
+Note: From dictionary[], any word can be taken any number of times and in any order.
+
+Examples :
+
+Input: s = "ilike", dictionary[] = ["i", "like", "gfg"]
+Output: true
+Explanation: s can be breakdown as "i like".
+
+Input: s = "ilikegfg", dictionary[] = ["i", "like", "man", "india", "gfg"]
+Output: true
+Explanation: s can be breakdown as "i like gfg".
+
+Input: s = "ilikemangoes", dictionary[] = ["i", "like", "man", "india", "gfg"]
+Output: false
+Explanation: s cannot be formed using dictionary[] words.
+
+Constraints:
+
+1 ≤ s.size() ≤ 3000
+1 ≤ dictionary.size() ≤ 1000
+1 ≤ dictionary[i].size() ≤ 100
+
+APPROACH:
+As here in this problem we have choices like the string present in the dictionary or not, we have to took some decisions and based on that we will find the result
+so here like if we are using dictionary so to find the particular length string in the string it will take O(n) time complexity so to do this in O(1) time complexity 
+we are using set to store the elements present in the dictionary.
+here basically we have to check for every string thats why we are using a loop inside the recursive function which starting from index i and went upto n and inside the 
+loop first we having a temp variable which will store the string from index k=i to n. and in between keep on checking whether that string is present in the set or not,
+if present then check for the next recursive call if it is also able to find the rest of the strings in the set then return true.
+otherwise we have traverse whole the string but not able to get the string in the set so return 0;
+
+base case:
+if(i==n) return 1;
+//by searching whole the string we that means we get the answer..                  
+
+CODE:
+
+class Solution {
+  public:
+  
+    int t[3001];
+    
+    bool solve(string &s, set<string>&st, int i, int n)
+    {
+        if(i==n) return 1;
+        
+        if(t[i]!=-1)
+         return t[i];
+        
+        string temp="";
+        
+        for(int k=i; k<n; k++)
+        {
+            temp += s[k];
+            
+            if(st.find(temp)!=st.end())
+            {
+                if(solve(s, st, k+1, n))
+                 return t[i] = 1;
+            }
+           
+        }
+        
+         return t[i] = 0;//after traversing whole string we didnt get that part in set
+         
+    }
+    bool wordBreak(string &s, vector<string> &dictionary) {
+        // code here
+        int n=s.size();
+        
+        memset(t, -1, sizeof(t));
+        
+        set<string>st;
+        
+        for(auto it: dictionary)
+         st.insert(it);
+         
+        return solve(s, st, 0, n); 
+    }
+};
