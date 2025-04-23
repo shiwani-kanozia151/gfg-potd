@@ -1,0 +1,148 @@
+Unique Number II
+
+Given an array arr[] containing 2*n + 2 positive numbers, out of which 2*n numbers exist in pairs whereas the other two number occur exactly once and are distinct.
+Find the other two numbers. Return the answer in increasing order.
+
+Examples:
+
+Input: arr[] = [1, 2, 3, 2, 1, 4]
+Output: [3, 4] 
+Explanation: 3 and 4 occur exactly once.
+
+Input: arr[] = [2, 1, 3, 2]
+Output: [1, 3]
+Explanation: 1 and 3 occur exactly once.
+
+Input: arr[] = [2, 1, 3, 3]
+Output: [1, 2]
+Explanation: 1 and 2 occur exactly once.
+
+Constraints:
+2 ≤ arr.size() ≤ 10^6 
+1 ≤ arr[i] ≤ 5 * 10^6
+arr.size() is even
+
+APPROACH1: NAIVE APPROACH
+Using 2 nested for loops and keep a count variable if the count of that variable is 1 then push it in the res array otherwise not. At last return the sorted array. 
+
+CODE:
+vector<int> singleNum(vector<int>& arr) {
+    int n = arr.size();
+    
+    vector<int> ans;
+    // Iterate over every element
+    for (int i = 0; i < n; i++) {
+
+        // Initialize count to 0
+        int count = 0;
+
+        for (int j = 0; j < n; j++) {
+
+            // Count the frequency of the element
+            if (arr[i] == arr[j]) {
+                count++;
+            }
+        }
+
+        // If the frequency of the element is one
+        if (count == 1) {
+            ans.push_back(arr[i]);
+        }
+    }
+    
+    sort(ans.begin(), ans.end());
+    // If no element exists at most once
+    return ans;
+}
+
+
+APPROACH2: Using Sorting - O(n logn) time and O(1) space
+vector<int> singleNum(vector<int> &arr) {
+    int n = arr.size();
+
+    sort(arr.begin(), arr.end());
+
+    vector<int> ans;
+    int i = 0;
+    
+    while (i < n) {
+        
+        // If element is present twice, skip
+        if (i + 1 < n && arr[i + 1] == arr[i]) {
+            i = i + 2;
+        }
+        
+        // If unique, append to result
+        else {
+            ans.push_back(arr[i]);
+            i++;
+        }
+    }
+
+    return ans;
+}
+
+APPRAOCH3: Using HashMap - O(n) time and O(n) space
+CODE:
+vector<int> singleNum(vector<int>& arr) {
+        // Code here.
+        unordered_map<int, int>mp;
+        vector<int>res;
+        
+        int n=arr.size();
+        
+        for(int i=0; i<n; i++)
+        {
+            mp[arr[i]]++;
+        }
+        
+        for(int i=0; i<n; i++)
+        {
+            if(mp[arr[i]]==1)
+             res.push_back(arr[i]);
+        }
+        
+        sort(res.begin(), res.end());
+        
+        return res;
+    }
+
+APPROACH4: Using Bit Manipulation - O(n) time and O(1) space
+
+The key idea is that by XOR-ing all elements in the array, we eliminate the effect of all numbers that appear
+twice (since a ^ a = 0), leaving us with x ^ y, the XOR of the two unique elements. We then find any set bit (typically the rightmost set bit) in this
+result to determine a position where these two numbers differ. Using this bit, we split the numbers into two groups, XOR each group separately, and get the
+two unique numbers.
+
+vector<int> singleNum(vector<int> &arr) {
+    
+    // Get the XOR of the two numbers we need to find
+    int xorVal = 0;
+    for (auto i : arr) {
+        xorVal = i ^ xorVal;
+    }
+
+    // Get its last set bit
+    xorVal &= -xorVal;
+
+    vector<int> res(2, 0);
+    
+    for (int num : arr) {
+        // If bit is not set, it belongs to the first set
+        if ((num & xorVal) == 0) { 
+            res[0] ^= num;
+        }
+        
+        // If bit is set, it belongs to the second set
+        else { 
+            res[1] ^= num;
+        }
+    }
+
+    // Ensure the order of the returned numbers is consistent
+    if (res[0] > res[1]) {
+        swap(res[0], res[1]);
+    }
+
+    return res;
+}
