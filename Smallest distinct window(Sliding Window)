@@ -1,0 +1,89 @@
+Smallest distinct window
+
+Given a string str, your task is to find the length of the smallest window that contains all the characters of the given string at least once.
+
+Example:
+
+Input: str = "aabcbcdbca"
+Output: 4
+Explanation: Sub-String "dbca" has the smallest length that contains all the characters of str.
+
+Input: str = "aaab"
+Output: 2
+Explanation: Sub-String "ab" has the smallest length that contains all the characters of str.
+
+Input: str = "geeksforgeeks"
+Output: 8
+Explanation: There are multiple substring with smallest length that contains all characters of str, "geeksfor" and "forgeeks". 
+
+Constraints:
+1 ≤ str.size() ≤ 10^5
+str contains only lower-case english alphabets.
+
+APPROACH 1: [Naive Approach] - Generating All Substrings - O(n ^ 2) Time and O(1) Space
+
+The idea is to first identify all the unique characters using a count array. Then, by generating all possible substrings and checking whether each contains
+all the unique characters, we can track and update the shortest valid substring found. The approach involves efficiently tracking which characters have been 
+seen using a visited array and leveraging two pointers to examine different substrings.Once a substring contains all distinct characters, we compare its length 
+with the minimum length found so far and update the result if necessary.
+
+CODE:
+int findSubString(string &str) {
+    int n = str.size();
+
+    int ans = n;
+
+    // to store all distinct characters
+    vector<bool> visited(26, false);
+    for (int i = 0; i < n; i++) {
+        visited[str[i]-'a'] = true;
+    }
+
+    for(int i = 0; i < n; i++) {
+        vector<bool> cur(26, false);
+
+        for(int j = i; j < n; j++) {
+            cur[str[j]-'a'] = true;
+
+            // if all characters are present
+            if(cur == visited) {
+                ans = min(ans, j - i + 1);
+                break;
+            }
+        }
+    }
+
+    return ans;
+}
+
+APPRAOCH 2: Sliding Window 
+In this approach first we will create a set which will contains the unique elements in it and a map to keep track of the count of the elements also, as soon as the 
+size of the map will become equal to the set size at that time only the process of the finding the minimum window starts taking a variable which keeps track of smallest
+window and keep shrinking the size of the string as soon as any element become zero in the map emove that char from the map.
+
+CODE:
+int findSubString(string& str) {
+        // code here
+        set<char>start(str.begin(), str.end());
+        
+        map<char, int>mp;
+        int st=0;
+        int ans=INT_MAX;
+        
+        for(int i=0; i<str.size(); i++)
+        {
+            mp[str[i]]++;
+           while(st<=i && mp.size()==start.size())
+           {
+              ans=min(ans, i-st+1);
+              mp[str[st]]--;
+              
+              if(mp[str[st]]==0)
+               mp.erase(str[st]);
+               
+               st++;
+           }
+        }
+        
+        return ans;
+    } 
