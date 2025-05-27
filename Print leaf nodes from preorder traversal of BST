@@ -1,0 +1,64 @@
+Date: 27 may 2025
+
+Print leaf nodes from preorder traversal of BST
+
+Given a preorder traversal of a BST, find the leaf nodes of the tree without building the tree.
+
+
+Examples:
+Input: preorder[] = [5, 2, 10]
+Output: [2, 10]
+
+Approach:
+By looking at the problem it was looking simple like just make a bst and then it will be easy to find the leaf node, but that was not the case here first the thought came inorder + preorder will help to tackle this 
+problem but not, here the thing which needs to be notice is that after a number if greater number is coming then that means that is a leaf node, and then remove that element from the list and likewise the approach 
+here is used, so the thing is here we a data structure where at the last insertion and deletion is performed i.e. we can use stack or vector. so here basically i have used the stack for this .
+
+1. create a stack and a resultant array.
+2. run a loop to traverse over the elements of the array from index 1.
+3. if preorder[i]<st.top() then st.push(preorder[i])
+   else 
+   then store the top element and keep on removing the elements till the stack is empty and top < preorder[i]. and then push the stored top element to the result array.
+   and then push the array element to the stack.
+4. at last return the result.
+
+
+CODE:
+ vector<int> leafNodes(vector<int>& preorder) {
+        // code here
+        
+        int n=preorder.size();
+        vector<int>ans;
+        stack<int>st;
+        st.push(preorder[0]);
+        
+        for(int i=1; i<n; i++)
+        {
+            if(preorder[i]<st.top())
+            {
+                st.push(preorder[i]);
+            }
+            else
+            {
+                int temp=st.top();
+                st.pop();
+                
+                if(!st.empty() && preorder[i]>st.top())
+                {
+                    while(!st.empty() && preorder[i]>st.top())
+                       st.pop();
+                       
+                    ans.push_back(temp);  //only push when it is stack is not empty..  
+                }
+                
+                
+                st.push(preorder[i]);
+                
+            }
+        }
+        
+        ans.push_back(preorder[n-1]);
+        
+        return ans;
+    }  
+
