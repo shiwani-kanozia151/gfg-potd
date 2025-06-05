@@ -1,0 +1,71 @@
+Count the paths
+
+Given a Directed Acyclic Graph (DAG) with V nodes labeled from 0 to V-1, and a list of directed edges, count the total number of distinct paths from a given start node to a destination node. Each edge is represented as edges[i] = [u, v], indicating a directed edge from u to v.
+
+Examples :
+Input: edges[][] = [[0,1], [0,3], [2,0], [2,1], [1,3]], V = 4, src = 2, dest = 3
+Output: 3
+Explanation: There are three ways to reach at 3 from 2. These are: 2 -> 1 -> 3, 2 -> 0 -> 3 and 2 -> 0 -> 1 -> 3.
+
+
+Approach: USING BACKTRACKING:
+first we will start from the source and make a visited array and mark the visited array as true for that src, now we will be calling dfs function where first we are checking for the destination node if we have 
+reach the destination node then we need increment the count and mark the visited[dest] as false and start searching in the neighbours of the node if not visited.
+
+
+CODE:
+class Solution {
+  public:
+  
+    void dfs(int i, vector<int>adj[], int dest, int &count, vector<bool>&visited)
+    {
+       if(i==dest)
+       {
+           count++;
+           visited[i]=false;
+           return;
+       }
+       
+       for(auto x: adj[i])
+       {
+           if(!visited[x])
+           {
+               visited[x]=true;
+               dfs(x, adj, dest, count, visited);
+           }
+       }
+       
+       visited[i]=false;
+       
+    }
+    
+    int countPaths(vector<vector<int>>& edges, int V, int src, int dest) {
+        // Code here
+        vector<int>adj[V];
+        
+        int n=edges.size();
+        
+        for(int i = 0; i <n; i++)
+        {
+            int x=edges[i][0];
+            int y=edges[i][1];
+            
+            adj[x].push_back(y);
+        }
+        
+        vector<bool>visited(V, false);
+        
+        
+        int count=0;
+        // for(int i=0; i<V; i++)
+        // {
+        //     if(i==src)
+        //     {
+                visited[src]=true;
+                dfs(src, adj, dest, count, visited);
+        //     }
+        // }
+        
+        return count;
+    }
+};
