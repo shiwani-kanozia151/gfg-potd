@@ -1,0 +1,83 @@
+Flattening a Linked List
+
+Given a linked list containing n head nodes where every node in the linked list contains two pointers:
+(i) next points to the next node in the list.
+(ii) bottom points to a sub-linked list where the current node is the head.
+Each of the sub-linked lists nodes and the head nodes are sorted in ascending order based on their data. Flatten the linked list such that all the nodes appear
+in a single level while maintaining the sorted order.
+
+Note:
+1. ↓ represents the bottom pointer and → represents the next pointer.
+2. The flattened list will be printed using the bottom pointer instead of the next pointer.
+
+Examples:
+
+Input:
+Output: 5 -> 7 -> 8 -> 10 -> 19 -> 20 -> 22 -> 28 -> 40 -> 45.
+Explanation: 
+Bottom pointer of 5 is pointing to 7.
+Bottom pointer of 7 is pointing to 8.
+Bottom pointer of 10 is pointing to 20 and so on.
+So, after flattening the linked list the sorted list will be 
+5 -> 7 -> 8 -> 10 -> 19 -> 20 -> 22 -> 28 -> 40 -> 45.
+
+Input:
+Output: 5 -> 7 -> 8 -> 10 -> 19 -> 22 -> 28 -> 30 -> 50
+Explanation:
+Bottom pointer of 5 is pointing to 7.
+Bottom pointer of 7 is pointing to 8.
+Bottom pointer of 8 is pointing to 30 and so on.
+So, after flattening the linked list the sorted list will be 
+5 -> 7 -> 8 -> 10 -> 19 -> 22 -> 28 -> 30 -> 50.
+
+Constraints:
+0 ≤ n ≤ 100
+1 ≤ number of nodes in sub-linked list(mi) ≤ 50
+1 ≤ node->data ≤ 10^4
+
+APPRAOCH 1 :
+Here basically i have used the msot basic approach to solve this question, first store all the data of linked list in a array and sort it as here we need to return the final linked list in the sorted 
+order so i sort that array and again build a new linked list and return the head of the new linked list. 
+This is not a good approach as we are making new list . the next approach i will share later..
+
+
+CODE: 
+Node* flatten(Node* root)
+{
+    if(root == NULL) return NULL;
+
+    vector<int> res;
+
+    Node* temp = root;
+
+    while(temp != NULL)
+    {
+        Node* t = temp;
+        while(t != NULL)
+        {
+            res.push_back(t->data);
+            t = t->bottom;
+        }
+        temp = temp->next;
+    }
+
+    sort(res.begin(), res.end());
+
+    // Build new list using BOTTOM pointer
+    Node* newHead = new Node(res[0]);
+    newHead->next = NULL;
+
+    Node* move = newHead;
+
+    for(int i = 1; i < res.size(); i++)
+    {
+        Node* n = new Node(res[i]);
+        n->next = NULL;
+        n->bottom = NULL;
+
+        move->bottom = n;   // ⭐ chain using bottom
+        move = move->bottom;
+    }
+
+    return newHead;
+}
