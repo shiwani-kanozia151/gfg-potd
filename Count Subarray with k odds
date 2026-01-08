@@ -1,0 +1,65 @@
+Count Subarray with k odds
+
+You are given an array arr[] of positive integers and an integer k. You have to count the number of subarrays that contain exactly k odd numbers.
+
+Examples:
+Input: arr[] = [2, 5, 6, 9], k = 2
+Output: 2
+Explanation: There are 2 subarrays with 2 odds: [2, 5, 6, 9] and [5, 6, 9].
+
+Input: arr[] = [2, 2, 5, 6, 9, 2, 11], k = 2
+Output: 8
+Explanation: There are 8 subarrays with 2 odds: [2, 2, 5, 6, 9], [2, 5, 6, 9], [5, 6, 9], [2, 2, 5, 6, 9, 2], [2, 5, 6, 9, 2], [5, 6, 9, 2], [6, 9, 2, 11] and [9, 2, 11].
+
+Constraint:
+1 ≤ k ≤ arr.size() ≤ 10^5
+1 ≤ arr[i] ≤ 10^9
+
+
+APPROACH 1: 
+USing the concept of subarray sum equal to k . here to usethat concept we are basically making the even element of the array as 0 and odd as 1 then the problem is exactly same to the standard problem .
+TC-O(N)
+SC-O(N)
+
+
+APPROACH 2:
+using 2 pointers.
+TC-O(N)
+SC-O(N)
+
+CODE:
+int solve(vector<int>& arr, int k)
+    {
+        int n=arr.size();
+        int i=0;
+        int j=0;
+        int odd=0;
+        int ans=0;
+        
+        while(i<n)
+        {
+            if(arr[i]%2==1)
+            {
+                odd++;
+            }
+            
+            while(odd>k)
+            {
+                if(arr[j]%2==1)
+                 odd--;
+                 
+                j++; 
+            }
+            
+            ans += (i-j+1);
+            
+            i++;
+        }
+        
+        return ans;
+    }
+    int countSubarrays(vector<int>& arr, int k) {
+        // code here
+        
+        return solve(arr, k)-solve(arr, k-1);
+    }
